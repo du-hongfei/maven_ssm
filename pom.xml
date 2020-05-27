@@ -227,6 +227,8 @@
 	</dependencies>
 
 	<build>
+	
+	
 <!-- 和项目名一致 -->
 		<finalName>maven_ssm</finalName>
 			<plugins>
@@ -241,6 +243,52 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			 <plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<prot>8080</prot>
+					<!-- 找到上面的路径(finalName 就是 maven_ssm) -->
+					<path>/${project.build.finalName}</path>
+					<!-- 这是是maven配置文件中的中的server标签的id -->
+					<server>mytomcat</server>
+					<!-- 这里是本地tomcat，如果是远程服务器可以改成对应的地址，实现自动部署 -->
+					<url>http://localhost:8080/manager/text</url>
+				</configuration>
+				<executions>
+					<execution>
+						<!-- 打包阶段 -->
+						<phase>package</phase>
+						<!-- 运行目标 -->
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 </plugins>
+<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+					<include>**/*.tld</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+					<include>**/*.tld</include>
+				</includes>
+				<!--这里是false，用true会报 数据库连接 错误 -->
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+       
 	</build>
 </project>
